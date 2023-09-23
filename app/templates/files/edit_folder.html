@@ -1,0 +1,5 @@
+<!-- Edit Folder Form -->
+<form id="editFolderForm{{ folder.id }}" class="edit-folder-form" data-folder-id="{{ folder.id }}">
+    <label for="edit-folder-name{{ folder.id }}" class="form-label">Folder Name</label>
+    <input type="text" class="form-control" id="edit-folder-name{{ folder.id }}" name="name" placeholder="Folder Name" required value="{{ folder.name }}">
+</form>

@@ -1,0 +1,377 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+    {{ folder.name }}
+{% endblock %}
+
+{% block content %}
+    <!-- Start::app-content -->
+    <div class="main-content app-content">
+        <div class="container-fluid">
+            <!-- Page Header -->
+            <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                <h1 class="page-title fw-semibold fs-18 mb-0"></h1>
+                <div class="ms-md-1 ms-0">
+                    <nav>
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Data Tables</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- Page Header Close -->
+
+            <!-- Start:: row-3 -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card custom-card">
+                        <div class="d-flex p-3 flex-wrap gap-2 align-items-center justify-content-between border-bottom">
+                            <div>
+                                <h6 class="fw-semibold mb-0">{{ folder.name }}</h6>
+                            </div>
+                            <div class="d-flex p-3 flex-wrap gap-2 align-items-center justify-content-between border-bottom">
+                                <!-- <div>
+                                    <h6 class="fw-semibold mb-0">Folders</h6>
+                                </div> -->
+                                <div class="d-flex gap-2">
+                                    <button id="folders-close-btn" class="d-sm-none d-block btn btn-icon btn-sm btn-danger-light">
+                                        <i class="ri-close-fill"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-primary d-flex align-items-center justify-content-center btn-wave waves-light"
+                                        data-bs-toggle="modal" data-bs-target="#create-folder">
+                                        <i class="ri-add-circle-line align-middle me-1"></i>Create Folder
+                                    </button>
+                                    <!-- Create Folder Modal -->
+                                    <div class="modal fade" id="create-folder" tabindex="-1" aria-labelledby="create-folder" data-bs-keyboard="false" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title" id="staticBackdropLabel">Create Folder</h6>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- Create Folder Form -->
+                                                        <form id="createFolderForm" onsubmit="createFolder(event)">
+                                                            <div class="input-group mb-2">
+                                                                <label for="create-folder1" class="input-group-text"><i class="fas fa-tag"></i></label>
+                                                                <input type="text" class="form-control" id="create-folder1" name="name" placeholder="Folder Name" required>
+                                                            </div>
+                                                            <div class="input-group mb-2">
+                                                                <div class="input-group">
+                                                                    <label class="input-group-text" for="parent-folder-select">
+                                                                        <i class="fas fa-folder"></i>
+                                                                    </label>
+                                                                    <select class="form-select" name="parent_id" id="parent-folder-select">
+                                                                        <option value="" selected>No Parent</option>
+                                                                        <!-- Parent folder options will be added here -->
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-icon btn-light" data-bs-dismiss="modal">
+                                                        <i class="ri-close-fill"></i>
+                                                    </button>
+                                                    <button type="submit" form="createFolderForm" class="btn btn-sm btn-success">Create</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center btn-wave waves-light"
+                                            data-bs-toggle="modal" data-bs-target="#create-file" data-folder-id="{{ folder_id }}">
+                                        <i class="ri-add-circle-line align-middle me-1"></i>Upload File
+                                    </button>
+                                    <!-- Upload File Modal -->
+                                    <div class="modal fade" id="create-file" tabindex="-1" aria-labelledby="create-file" data-bs-keyboard="false" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title" id="staticBackdropLabel1">Upload File</h6>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="uploadFileForm" enctype="multipart/form-data">
+                                                        <!-- Add folder dropdown options populated by JavaScript -->
+                                                        <div class="input-group mb-2">
+                                                                <div class="input-group">
+                                                                    <label class="input-group-text" for="inputGroupSelect01">
+                                                                        <i class="fas fa-folder"></i>
+                                                                    </label>
+                                                                    <select class="form-select" name="folder_id" id="folder-select">
+                                                                        <option value="" selected>No Parent</option>
+                                                                        <!-- Folder options will be added here -->
+                                                                    </select>
+                                                                </div>
+                                                        </div>
+                                                        <!-- <label for="create-file1" class="form-label">File</label> -->
+                                                        <input type="file" class="form-control" id="create-file1" name="file" accept=".pdf, .docx, .csv, .xlsx, .jpg, .png, .gif, .mp4" required>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-sm btn-icon btn-light" data-bs-dismiss="modal">
+                                                                <i class="ri-close-fill"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-success" onclick="uploadFile()">Upload</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered text-nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in contents %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <!-- Check if it's a file or a folder and show appropriate icon -->
+                                                    {% if item.type == "file" %}
+                                                        <span class="btn btn-icon btn-m btn-primary-transparent">
+                                                            <i class="ri-file-line"></i>
+                                                        </span>
+                                                    {% else %}
+                                                        <a class="btn btn-icon btn-m btn-primary-transparent" href="{{ url_for('views.view_folder', folder_id=item.id) }}">
+                                                            <i class="ri-folder-line"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                     &nbsp; &nbsp; {{ item.name }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="hstack gap-2 fs-15">
+                                                    {% if item.type == "file" %}
+                                                        <!-- File-specific actions -->
+                                                        <a href="javascript:void(0);"
+                                                            class="btn btn-icon btn-sm btn-primary-transparent rounded-pill">
+                                                            <i class="ri-eye-line"></i>
+                                                        </a>
+                                                        <a href="{{ url_for('views.download_file', file_id=item.id) }}"
+                                                            class="btn btn-icon btn-sm btn-success-transparent rounded-pill">
+                                                            <i class="ri-download-2-line"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);"
+                                                            class="btn btn-icon btn-sm btn-info-transparent rounded-pill">
+                                                            <i class="ri-edit-line"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" onclick="deleteFile({{ item.id }});"
+                                                            class="btn btn-icon btn-sm btn-danger-transparent rounded-pill">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <!-- Folder-specific actions, adjust as needed -->
+{#                                                        <a href="{{ url_for('views.view_folder', folder_id=item.id) }}"#}
+{#                                                            class="btn btn-icon btn-sm btn-primary-transparent rounded-pill">#}
+{#                                                            <i class="ri-eye-line"></i>#}
+{#                                                        </a>#}
+                                                        <a href="#"
+                                                            class="btn btn-icon btn-sm btn-success-transparent rounded-pill">
+                                                            <i class="ri-download-2-line"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);"
+                                                            class="btn btn-icon btn-sm btn-info-transparent rounded-pill">
+                                                            <i class="ri-edit-line"></i>
+                                                        </a>
+                                                        <a href="#"
+                                                            class="btn btn-icon btn-sm btn-danger-transparent rounded-pill">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- End:: row-3 -->
+
+            <a href="{{ url_for('views.file_manager') }}" class="btn btn-secondary mt-4">
+                Back to Folders
+            </a>
+        </div>
+    </div>
+    <!-- End::app-content -->
+
+    <script>
+        function deleteFile(fileId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                focusConfirm: false,
+                focusCancel: false,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/files/${fileId}`, {
+                        method: 'DELETE',
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message === 'File deleted') {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            ).then(() => location.reload());
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'There was an error deleting your file.',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        };
+    </script>
+    <script>
+        // Function to populate the folder dropdown with API data
+        function populateFolderDropdown() {
+                    const folderSelect = document.getElementById('folder-select');
+
+                    // Make an API request to get the list of user's folders
+                    fetch('/api/folders', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer {{ API_TOKEN }}', // Render the API_TOKEN here
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate the dropdown options with folder data
+                        data.forEach(folder => {
+                            const option = document.createElement('option');
+                            option.value = folder.id;
+                            option.textContent = folder.name;
+                            folderSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching folders:', error);
+                    });
+                }
+
+        // Function to populate the parent folder dropdown with API data
+        function populateParentFolderDropdown() {
+            const parentFolderSelect = document.getElementById('parent-folder-select');
+
+            // Make an API request to get the list of user's folders
+            fetch('/api/folders', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer {{ API_TOKEN }}',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(folder => {
+                    const option = document.createElement('option');
+                    option.value = folder.id;
+                    option.textContent = folder.name;
+                    parentFolderSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching folders:', error);
+            });
+        }
+
+
+        // Function to create a folder using the API
+        function createFolder(event) {
+            event.preventDefault();
+            const folderName = document.getElementById('create-folder1').value;
+            const parentFolderId = document.getElementById('parent-folder-select').value;
+
+            // Make an API request to create a new folder
+            fetch('/api/folders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer {{ API_TOKEN }}',
+                },
+                body: JSON.stringify({ name: folderName, parent_id: parentFolderId || null }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error creating folder:', error);
+            });
+        }
+
+        // Call the populateParentFolderDropdown function when the page loads
+        window.addEventListener('load', () => {
+            populateFolderDropdown();
+        });
+
+
+        // Function to upload a file using the API
+                function uploadFile() {
+                    const folderSelect = document.getElementById('folder-select');
+                    const formData = new FormData(document.getElementById('uploadFileForm'));
+
+                    // Set the folder_id field in the form data with the selected folder's value
+                    formData.set('folder_id', folderSelect.value);
+
+                    // Make an API request to upload a file
+                    fetch('/api/files', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer {{ API_TOKEN }}', // Render the API_TOKEN here
+                        },
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // Reload the page to reflect the newly uploaded file
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error uploading file:', error);
+                    });
+                }
+
+        // Call the populateParentFolderDropdown function when the page loads
+        window.addEventListener('load', () => {
+            populateParentFolderDropdown();
+        });
+    </script>
+
+
+
+   
+    
+    
+{% endblock %}
